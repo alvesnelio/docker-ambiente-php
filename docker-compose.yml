@@ -1,0 +1,47 @@
+version: "3.7"
+services:
+  # Nome do serviço
+  web:
+    # Imagem do docker-hub
+    image: nginx:1.19.1
+
+    # Nome do container
+    container_name: nginx-projeto-php
+
+    # Reinicialização do container: por default o parametro é "no", porém vamos deixar para que seja sempre que necessário com o parametro "always"
+    restart: always
+
+    # Volumes
+    volumes:
+      - ./www:/www
+      - ./docker/nginx/conf.d/app-docker-php.localhost.conf:/etc/nginx/conf.d/app-docker-php.localhost.conf
+      - ./docker/nginx/logs:/var/log/nginx/
+
+    # Pastas de trabalhos
+    working_dir: /www # Pasta maepada no root do volume "www" no arquivo de configuração do Nginx
+
+    # Portas de acesso da applicação
+    ports:
+      - "80:80"
+
+    #Links de vinculação de serviços
+    links:
+      - php
+
+  php:
+    image: php:7.3-fpm
+
+    container_name: php73-projeto-php
+
+    volumes:
+      - ./www:/www
+
+    links:
+      - db
+
+  db:
+    image: mysql:5.7
+    container_name: mysql-projeto-php
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: teste

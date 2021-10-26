@@ -1,0 +1,51 @@
+{
+    "editor.quickSuggestions": {
+        "other": true,
+        "comments": true,
+        "strings": true
+    },
+    "editor.formatOnSave": true,
+    "[yaml]": {
+        "editor.formatOnSave": false,
+    },
+    "[twig]": {
+        "editor.formatOnSave": false,
+    },
+    "[html]": {
+        "editor.formatOnSave": false,
+    },
+    "[php]": {
+        "editor.formatOnSave": false,
+    },
+    "[css]": {
+        "editor.formatOnSave": false,
+    },
+    "[scss]": {
+        "editor.formatOnSave": false,
+    },
+    "files.associations": {
+        "*.module": "php",
+        "*.twig": "twig"
+    },
+    "emmet.includeLanguages": {
+        "twig": "html"
+    },
+    "workbench.colorCustomizations": {
+        "terminal.foreground": "#FFFFFF",
+        "terminalCursor.foreground": "#FFFFFF",
+        "terminal.selectionBackground": "#F1F1F1",
+        "terminal.ansiBlack": "#FFFFFF",
+    },
+    "workbench.iconTheme": "vscode-icons",
+    "workbench.colorTheme": "Monokai",
+    "terminal.integrated.tabs.enabled": false,
+    "launch": {
+        "configurations": [],
+        "compounds": []
+    },
+    "explorer.confirmDelete": false,
+    "workbench.settings.editor": "json",
+    "workbench.editorAssociations": {
+        "*.pdf": "default"
+    },
+}
