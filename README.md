@@ -9,7 +9,7 @@ Ambiente DOCKER com NGINX, PHP e MYSQL
 
 - Ubuntu:20.04-lts
 - [Docker](https://docs.docker.com/engine/install/)
-- [docker-compose](https://docs.docker.com/compose/install/)
+- [Docker-Compose](https://docs.docker.com/compose/install/)
   
 ## Serviços para composição do arquivo docker-compose
 
@@ -17,7 +17,7 @@ Ambiente DOCKER com NGINX, PHP e MYSQL
   - Versão: `nginx:1.19.1` 
 - [PHP](https://hub.docker.com/_/php)
   - Versão: `php:7.3-fpm`
-- [Mysql](https://hub.docker.com/_/mysql)
+- [MySQL](https://hub.docker.com/_/mysql)
   - Versão: `mysql:5.7`
 
 ### Roteiro de criação do ambiente
