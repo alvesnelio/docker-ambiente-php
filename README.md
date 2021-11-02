@@ -22,4 +22,4 @@ Ambiente DOCKER com NGINX, PHP e MYSQL
 
 ### Roteiro de criação do ambiente
 
-- [Passo a passo de criação caso deseja saber como tudo foi criado](roteiro-docker-compose.md).
+- [Passo a passo de criação caso deseja saber como tudo foi criado](docs/roteiro-docker-compose.md).
