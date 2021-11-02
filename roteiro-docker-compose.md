@@ -62,7 +62,7 @@ services:
   - *Dentro da pasta do projeto, vamos criar um novo diretorio chamado `conf.d`.*
   - __Comando 1__: `mkdir -p docker/nginx/conf.d`.
   - __Comando 2__: `mkdir -p docker/nginx/logs`.
-- Após a criação dos diretorios *`conf.d`* e *`logs`* de nossos serviços, vamos criar os arquivos que foram mapeados nos vaolumes.
+- Após a criação dos diretorios *`conf.d`* e *`logs`* de nossos serviços, vamos criar os arquivos que foram mapeados nos volumes.
   - __Comando 1__: `touch docker/nginx/conf.d/app-docker-php.conf`.
     - *Este arquivo foi criado com este nome apenas pelo motivo de este ser o host adicionado nos hosts `etc/hosts`*.
   - __Comando 2__: `touch docker/nginx/logs/access.log`.
@@ -94,13 +94,14 @@ server{
   - *`server name app-docker-php`*: nome do nosso servidor que iria carregar estas configurações.
   - *`root /www`*: Diretorio raiz do nosso host que foi mapeado no volume do `docker-compose.yml`.
   - *`index index.html`*: arquivos indexados para leitura no nosso `server_name`.
-  - *`location /{}`*: Checa em qual localização se encontra e define o tipo de arquivo a ser indexado, apenas uma reforço para a linha de cima.
+  - *`location /{}`*: São usados para definir como o Nginx deve responder à requisições à diferentes recursos e URIs.
   - *`error_log`*: Local de registro do log que foi mapeado no volume do `docker-compose.yml`
   - *`access_log`*: Local de registro do log que foi mapeado no volume do `docker-compose.yml`
 - Após a criação do arquivo `app-docker-php.conf`, vamos criar o diretorio `www` na raiz do projeto.
-  - Comando 1: `mkdir www`
+  - __Comando 1__: `~/DEV/projetos/app-docker-php`.
+  - __Comando 2__: `mkdir www`
 - Após a criação do diretorio, vamos criar um arquivo `index.html` com uma configuração bem simples.
-  - Comando 1: `touch www/index.html`
+  - __Comando 1__: `touch www/index.html`
 
 ```
 <!DOCTYPE html>
@@ -120,7 +121,7 @@ server{
 - Após a criaçãdo do arquivo `index.html` vamos criar o nosso host local.
 - Editar o arquivo de hosts do nosso ubuntu `/etc/hosts`.
   - __Comando 1__: `sudo nano /etc/hosts`.
-    - Adicione a seguinte linha nos seus hosts `127.0.0.1       app-docker-php`.
+    - Adicione a seguinte linha nos seus hosts `127.0.0.1   app-docker-php`.
 - Agora que criamos o host local, vamos construir os serviços do docker.
 
 </br> 
@@ -160,7 +161,7 @@ docker-down:
     - __URL Projeto__: [http://app-docker-php/](http://app-docker-php/)
 - Como pode ser visto, a aplicação abriu corretamenta no nosso host com um arquivo HTML.
 
-<br>
+</br>
 
 - Após a criação do serviço `web` que está relacionado ao servidor `nginx:1.19.1`, vamos criar o nosso serviço `php`.
 - No seu editor de arquivos, vamos editar o `docker-compose.yml` adicionando os seguintes codigos.
@@ -186,7 +187,7 @@ docker-down:
 - Após a adição do codigo acima, vamos criar um arquivo `.php` apartir do arquivo `.html` ja existente.
   - __Comando 1__: `cd ~/DEV/projetos/app-docker-php/`
   - __Comando 2__: `cp www/index.html www/index.php`
-  - __Comando 2__: `rm -f www/index.html`
+  - __Comando 3__: `rm -f www/index.html`
 - Como pode ser vistos nos comandos acima, primeiro acessamos o diretorio raiz do nosso projeto, depois realizamos uma copia do `index.html` em um arquivo `index.php` e removemos o arquivo `index.html`.
 - Agora vamos adicionar um `phpinfo()` no nosso arquivo `.php`.
 - Abaixo do elemento `HTML <h1>...</h1>` adicione o seguinte trecho de codigo.
@@ -223,14 +224,36 @@ server{
 }
 ```
 
+- Explicação do codigo `app-docker-php.conf`.
+  - *`server;`*: tag de abertura do nosso servidor nginx.
+  - *`listen 80;`*: faz referencia a porta que vai ser escutada pelo nosso servidor nginx.
+  - *`server name app-docker-php;`*: nome do nosso servidor que iria carregar estas configurações.
+  - *`root /www;`*: Diretorio raiz do nosso host que foi mapeado no volume do `docker-compose.yml`.
+  - *`index index.html index.php;`*: Prioridade dos arquivos a serem indexados para leitura no nosso `server_name`.
+  - *`location ~ \.php$ }`*: são usados para definir como o Nginx deve responder à requisições à diferentes recursos e URIs.
+    - Com o parametro `~\`, as localizações serão interpretada como uma expressão regular case-sensitive.
+    - *`try_files`*: [Verifica a existência de arquivos na ordem especificada.](http://nginx.org/en/docs/http/ngx_http_core_module.html#try_files)
+    - *`fastcgi_split_path_info`*: [Define uma expressão regular.](http://nginx.org/en/docs/http/ngx_http_fastcgi_module.html#fastcgi_split_path_info)
+    - *`fastcgi_pass`*: [Define o endereço de um servidor.](http://nginx.org/en/docs/http/ngx_http_fastcgi_module.html#fastcgi_pass)
+    - *`fastcgi_index`*: [Define um nome de arquivo que será anexado após um URI que termina com uma barra.](http://nginx.org/en/docs/http/ngx_http_fastcgi_module.html#fastcgi_index)
+    - *``*:
+    - 
+  - *`error_log`*: Local de registro do log que foi mapeado no volume do `docker-compose.yml`
+  - *`access_log`*: Local de registro do log que foi mapeado no volume do `docker-compose.yml`
+
 - Após a alteração do arquivo `app-docker-php.conf`, vamos reconstruir nosso container.
   - __Comando 1__: `make docker-build`.
   - Acesse o site novamente no seu navegador e veja se está exibindo a tela do `phpinfo()`.
-    - [http://app-docker-php](app-docker-php)
+    - [http://app-docker-php](app-docker-php) - Se estiver exibindo a tela, significa que a criação do serviço PHP ocorreu tudo certo.
 
+</br>
 - Após a criação do serviço `php` que está relacionado com o serviço `php:7.3-fpm`, vamos criar o serviço `mysql`.
+- No arquivo `docker-compose.yml` vamos adicionar o codigo abaixo no service.
 
 ```
+    links:
+      - db
+
   # Nome do serviço.
   db:
     
@@ -245,3 +268,17 @@ server{
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: teste
 ```
+
+- Após a adição deste serviço no nosso `docker-composer.yml`, vamos derrubar os nossos serviços e os criar novamente.
+  - No terminal aperte os botões do teclado `CTRL +C` caso você tenha levantado os serviços com `make docker-build`.
+  - Após derrubar o container, vamos levantar ele novamente para que ele seja executado com o serviço de banco de dados.
+  - __Comando 1__: `make docker-build`.
+
+</br>
+
+- Para checar se tudo foi criado corretamente vamos executar o acesso ao contaier do mysql no nosso proprio terminal.
+  - No nosso terminal vamos executar um `docker container exec`.
+    - __Comando 1:__ `docker container exec -it mysql-projeto-php mysql -u root -p`
+      - *Senha*: Senha configura no nosso docker-compose.yml serviço mysql `MYSQL_ROOT_PASSWORD`.
+    - __Comando 2:__ `show databases;`
+    - Se listar as bases de dados, significa que a instalação do serviço ocorreu com sucesso.
